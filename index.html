@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Cybersecurity Escape Room</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>      
+	<body>
+        <h1 id="title">Cybersecurity Escape Room</h1>
+        <div id="video-player">
+            <video width="320" height="240" id="current-video" controls>
+                <source src="test.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div>
+            <input id="code-entry" type="text">
+        </div>
+        <div>
+            <button id="code-submit" onclick="updateVideo()">Enter Code</button>
+        </div>
+        <script src="script.js"></script>
+	</body>
+</html>
