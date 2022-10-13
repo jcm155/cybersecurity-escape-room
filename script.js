@@ -1,6 +1,11 @@
 currentVideo = document.getElementById("current-video");
-allowedCodes = ['{default}', 'SECRET'];
-videoLinks = ['test.mp4', 'test-2.mp4'];
+allowedCodes = ['{default}', 'KING PAWN', 'RUN BACKDOOR', 'ME0WMIXOLOGIST#1'];
+videoLinks = [
+    'https://drive.google.com/file/d/1D5eYsmRECX4tgV1y_SX7RGqAfRy75BR1/preview',
+    'https://drive.google.com/file/d/1BcF9zhTIcIqFII1G749R-ZcFACLvtWdB/preview',
+    'https://drive.google.com/file/d/1IG4Ee833vC899g2enhhm5qeyUATlcMRb/preview',
+    'https://drive.google.com/file/d/1vPHLZ8V0z95_Gfxva4s66vmFMiP3I9S3/preview'
+];
 allSavedCodes = [];
 
 function updateVideo() {
@@ -34,5 +39,5 @@ function addElement(tag, content, parent, attributes) {
 }
 
 function updatePreviousCodes() {
-
+    
 }
