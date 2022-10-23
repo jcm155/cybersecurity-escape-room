@@ -4,27 +4,28 @@ allowedCodes = [
     '63-29-30-31-26-46-37-45-64',
     '10-8-13-6-65-15-0-22-13',
     '17-20-13-65-1-0-2-10-3-14-14-17',
-    '12-4-53-22-12-8-23-14-11-14-6-8-18-19-52-54'
+    '12-4-53-22-12-8-23-14-11-14-6-8-18-19-52-54',
+    '63-11-14-18-18-64'
 ];
 videoLinks = [
-    'https://drive.google.com/file/d/1NSdzGPs52Y-cucg9K9biu0l_4qZJ6h8h/preview',
-    'https://drive.google.com/file/d/1Nkbpk1oF_4BX5YvaMFmNcxkGgpHjie7j/preview',
-    'https://drive.google.com/file/d/16nyoAR7eagGu3_GiU-RCbxhb7FtfPNPU/preview',
-    'https://drive.google.com/file/d/12sXeu8x1LhZyXuItgQ2Xc_NGFnSu5Lzu/preview'
+    'https://drive.google.com/file/d/1Tqoq4XAELbKyUk8mfEYlByda3yjlZ8VX/preview',
+    'https://drive.google.com/file/d/1hs67zLjd9S5ph9CnE-SKR2g5xHVoIGI-/preview',
+    'https://drive.google.com/file/d/13AFNJVUF3DwRk-k9GbRM_XnGaD3W4_RY/preview',
+    'https://drive.google.com/file/d/1GuMY7BTZQOUHO2vFz62DeIGOHQOFpkGr/preview',
+    'https://drive.google.com/file/d/1hf40BGx3WgF2pb2P0PW0_jJ17RIkekS-/preview'
 ];
 allSavedCodes = [];
 allCorrectCodes = [
     correctCode('initial'),
     correctCode('puzzle2'),
     correctCode('puzzle3'),
-    correctCode('win')
+    correctCode('win'),
+    correctCode('loss'),
 ]
 
 function updateVideo() {
     if (allCorrectCodes.includes(currentCode())) {
         currentVideo.src = videoLinks[allCorrectCodes.indexOf(currentCode())];
-    } else {
-        currentVideo.src = videoLinks[0];
     }
 }
 
@@ -62,6 +63,9 @@ function correctCode(video) {
     }
     if (video === 'win') {
         charString = allowedCodes[3];
+    }
+    if (video === 'loss') {
+        charString = allowedCodes[4];
     }
     correctSymbols = charString.split('-');
     result = '';
