@@ -24,10 +24,19 @@ allCorrectCodes = [
 ];
 totalNumMinutes = 40;
 endTime = new Date(new Date().getTime() + totalNumMinutes * 60000);
+gameState = 'play';
+teamName = '';
 
 function updateVideo(code) {
-    if (allCorrectCodes.includes(code)) {
+    if (allCorrectCodes.includes(code) && gameState === 'play') {
         currentVideo.src = videoLinks[allCorrectCodes.indexOf(code)];
+        if (code === allCorrectCodes[3]) {
+            gameState = 'win';
+            clearInterval(x);
+        }
+        if (code === allCorrectCodes[4]) {
+            gameState = 'loss';
+        }
     }
 }
 
@@ -88,6 +97,18 @@ function addDefault() {
 
 function padWithZero(num, targetLength) {
     return String(num).padStart(targetLength, '0');
+}
+
+function startEscapeRoom() {
+    if (document.getElementById("pwd-entry").value.toUpperCase() === 'STARTCYBER') {
+        teamName = document.getElementById("name-entry").value;
+        endTime = new Date(new Date().getTime() + totalNumMinutes * 60000);
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('main').style.visibility = 'visible';
+        document.getElementById("clock").innerHTML = '40:00';
+    } else {
+        alert('Incorrect password. Please ask the escape room guide for the correct password.');
+    }
 }
 
 // Update the count down every 1 second

@@ -5,23 +5,48 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="icon" href="favicon-32x32.png" type="image/x-icon"/>
 	</head>      
 	<body onload="addDefault()">
         <h1 id="title">Cybersecurity Escape Room</h1>
-        <div id="clock">40:00</div>
-        <div id="video-player">
-            <iframe id="current-video" src="https://drive.google.com/file/d/1Tqoq4XAELbKyUk8mfEYlByda3yjlZ8VX/preview" width="640" height="480" allow="autoplay"></iframe>
+        <div id="login">
+            <div id="name-entry-container" class="terminal">
+                Enter team name: 
+                <input id="name-entry" class="terminal-text" type="text">
+            </div>
+            <div id="pwd-entry-container" class="terminal">
+                Enter password:  
+                <input id="pwd-entry" class="terminal-text" type="text">
+            </div>
+            <div>
+                <button id="login-button" class="main-button" onclick="startEscapeRoom()">Begin Escape Room</button>
+            </div>
+            <div>
+                <h3>Clicking 'Begin Escape Room' will start the timer.</h3>
+                <h3>Your goal is to watch videos in order to find clues for secret passwords.</h3>
+                <h3>When you find a password, enter it into the code box to check it.</h3>
+                <h3>If it is correct, the next video will appear in the box.</h3>
+                <h3>You may click on the links below the video to rewatch any previous video.</h3>
+                <h3>If the timer runs out, you will immediately lose the escape room and will be unable to enter more codes.</h3>
+                <h3>Good luck, agents.</h3>
+            </div>
         </div>
-        <div id="code-entry-container">
-            Enter password: 
-            <input id="code-entry" type="text">
-        </div>
-        <div>
-            <button id="code-submit" onclick="updateVideo(currentCode())">Enter Code</button>
-        </div>
-        <script src="script.js"></script>
-        <div id="saved-codes">
-            View previous videos:
+        <div id="main" style="visibility:hidden">
+            <div id="clock">40:00</div>
+            <div id="video-player">
+                <iframe id="current-video" src="https://drive.google.com/file/d/1Tqoq4XAELbKyUk8mfEYlByda3yjlZ8VX/preview" width="640" height="480" allow="autoplay"></iframe>
+            </div>
+            <div id="code-entry-container" class="terminal">
+                Enter password: 
+                <input id="code-entry" class="terminal-text" type="text">
+            </div>
+            <div>
+                <button id="code-submit" class="main-button" onclick="updateVideo(currentCode())">Enter Code</button>
+            </div>
+            <script src="script.js"></script>
+            <div id="saved-codes">
+                View previous videos:
+            </div>
         </div>
 	</body>
 </html>
