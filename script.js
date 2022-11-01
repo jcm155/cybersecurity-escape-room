@@ -24,8 +24,10 @@ allCorrectCodes = [
 ];
 totalNumMinutes = 40;
 endTime = new Date(new Date().getTime() + totalNumMinutes * 60000);
-gameState = 'play';
+gameState = 'menu';
 teamName = '';
+clockShown = true;
+defeatReason = 'unset';
 
 function updateVideo(code) {
     if (allCorrectCodes.includes(code) && gameState === 'play') {
@@ -33,17 +35,31 @@ function updateVideo(code) {
         if (code === allCorrectCodes[3]) {
             gameState = 'win';
             clearInterval(x);
-        }
-        if (code === allCorrectCodes[4]) {
+            playSound('win');
+            document.getElementById('code-controls').style.display = 'none';
+            document.getElementById('mission-controls').style.display = 'block';
+            document.getElementById('clock').style.color = 'yellow';
+            document.getElementById('clock').style.borderColor = 'yellow';
+        } else if (code === allCorrectCodes[4]) {
             gameState = 'loss';
+            clearInterval(x);
+            playSound('loss');
+            defeatReason = defeatReason === 'unset' ? 'being stupid' : defeatReason;
+            document.getElementById('code-controls').style.display = 'none';
+            document.getElementById('mission-controls').style.display = 'block';
+            document.getElementById('clock').style.color = 'red';
+            document.getElementById('clock').style.borderColor = 'red';
+        } else {
+            playSound('correct')
         }
+    } else {
+        playSound('incorrect');
     }
 }
 
 function currentCode() {
     if (!allSavedCodes.includes(document.getElementById("code-entry").value.toUpperCase()) && document.getElementById("code-entry").value.toUpperCase() !== '{default}' && allCorrectCodes.includes(document.getElementById("code-entry").value.toUpperCase())) {
         allSavedCodes.push(document.getElementById("code-entry").value.toUpperCase());
-        //addElement('div', document.getElementById("code-entry").value.toUpperCase(), 'saved-codes', []);
         addVideoLink(document.getElementById("code-entry").value.toUpperCase());
     }
     return document.getElementById("code-entry").value.toUpperCase();
@@ -104,11 +120,53 @@ function startEscapeRoom() {
         teamName = document.getElementById("name-entry").value;
         endTime = new Date(new Date().getTime() + totalNumMinutes * 60000);
         document.getElementById('login').style.display = 'none';
-        document.getElementById('main').style.visibility = 'visible';
+        document.getElementById('main').style.display = 'block';
         document.getElementById("clock").innerHTML = '40:00';
+        gameState = 'play';
     } else {
         alert('Incorrect password. Please ask the escape room guide for the correct password.');
     }
+}
+
+function playSound(sound) {
+    if (sound === 'correct') {
+        new Audio('sound-correct.wav').play();
+    }
+    if (sound === 'incorrect') {
+        new Audio('sound-incorrect.wav').play();
+    }
+    if (sound === 'win') {
+        new Audio('sound-win.wav').play();
+    }
+    if (sound === 'loss') {
+        new Audio('sound-loss.wav').play();
+    }
+}
+
+function showResultScreen() {
+    var startNumSeconds = totalNumMinutes*60;
+    var endTime = document.getElementById('clock').innerHTML.split(':');
+    var endNumSeconds = parseInt(endTime[0])*60 + parseInt(endTime[1]);
+    var totalSeconds = startNumSeconds - endNumSeconds;
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = totalSeconds % 60;
+    document.getElementById('team-text').innerHTML = 'Team: ' + teamName;
+    if (gameState === 'win') {
+        document.getElementById('time-text').innerHTML = 'Final Time: ' + padWithZero(minutes, 2) + ':' + padWithZero(seconds, 2);
+    } else {
+        document.getElementById('time-text').innerHTML = 'Defeat Reason: ' + defeatReason;
+    }
+    document.getElementById('result-screen').style.borderColor = gameState === 'win' ? 'lime' : 'red';
+    document.getElementById('result-screen').style.color = gameState === 'win' ? 'lime' : 'red';
+    document.getElementById('result-text').style.borderColor = gameState === 'win' ? 'lime' : 'red';
+    document.getElementById('result-text').innerHTML = gameState === 'win' ? 'SUCCESS' : 'FAILURE';
+    document.getElementById('main').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+}
+
+function returnToMain() {
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
 }
 
 // Update the count down every 1 second
@@ -128,9 +186,10 @@ var x = setInterval(function() {
   document.getElementById("clock").innerHTML = padWithZero(minutes, 2) + ":" + padWithZero(seconds, 2);
 
   // If the count down is finished, write some text
-  if (distance < 0) {
+  if (distance < 0 && gameState === 'play') {
     clearInterval(x);
     document.getElementById("clock").innerHTML = "00:00";
+    defeatReason = 'out of time';
     updateVideo('{LOSS}');
   }
 }, 500);
