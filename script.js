@@ -1,38 +1,71 @@
 currentVideo = document.getElementById("current-video");
 chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#0123456789{} "
-allowedCodes = [
+/*allowedCodes = [
     '63-8-13-8-19-8-0-11-64',
     '10-8-13-6-65-15-0-22-13',
     '17-20-13-65-1-0-2-10-3-14-14-17',
     '15-20-17-17-18-22-14-17-3',
     '63-11-14-18-18-64'
-];
-videoLinks = [
-    'https://drive.google.com/file/d/1Tqoq4XAELbKyUk8mfEYlByda3yjlZ8VX/preview',
+];*/
+allowedCodes = [
+    '63-8-13-8-19-8-0-11-64',//initial video
+    '1-14-19-13-4-19',//second video
+    '18-4-2-20-17-8-19-24-65-16-20-4-18-19-8-14-13-18',//first question
+    '1-17-20-19-4-65-5-14-17-2-4',//second question
+    '18-19-4-6-0-13-14-6-17-0-15-7-24',//third question
+    '14-15-4-13-65-18-14-20-17-2-4-65-8-13-19-4-11-11-8-6-4-13-2-4',//fourth question
+    '15-7-8-18-7-8-13-6-65-0-19-19-0-2-10',//fifth question
+    '17-0-13-18-14-12-22-0-17-4',//third video
+    '18-4-13-3-2-0-18-7',//win video
+    '63-11-14-18-18-64'//loss video
+]
+/*videoLinks = [
+    'https://drive.google.com/file/d/1peqO1t_ldzy9vXB78e3mqyNcAvHRqPro/preview',
     'https://drive.google.com/file/d/1hs67zLjd9S5ph9CnE-SKR2g5xHVoIGI-/preview',
     'https://drive.google.com/file/d/1Omvv2PiYCI-yPa1kPjl0OXAuOsdk_HL9/preview',
     'https://drive.google.com/file/d/1GuMY7BTZQOUHO2vFz62DeIGOHQOFpkGr/preview',
     'https://drive.google.com/file/d/1hf40BGx3WgF2pb2P0PW0_jJ17RIkekS-/preview'
+];*/
+videoLinks = [
+    'https://drive.google.com/file/d/1peqO1t_ldzy9vXB78e3mqyNcAvHRqPro/preview',//init
+    'https://drive.google.com/file/d/1k1E8CnrM-GvojkChj-vWLVj1dYx6TjUg/preview',//second
+    'https://drive.google.com/file/d/1NZqJuUhLe73pGDTT3n_sp6b_oAWbWQkZ/preview',//q1
+    'https://drive.google.com/file/d/1XCQyPjJOnisU32F7emi4RenslUf69fZK/preview',//q2
+    'https://drive.google.com/file/d/1cyD33ZO63QYtyJhxQLBh8riZYhAABmYe/preview',//q3
+    'https://drive.google.com/file/d/1LRHMt6ER00aNPui9ruPODr-3rM0wL4Eq/preview',//q4
+    'https://drive.google.com/file/d/1_q4frXp6dALjiXtw_PVNfCVM1nfQa4WN/preview',//q5
+    'https://drive.google.com/file/d/1-edDwWaS87EzRg2Qf6C-ArULfDtiMHNG/preview',//third
+    'https://drive.google.com/file/d/1Gt22SR84L-bW6EouKESdUeTHmZeOLjZC/preview',//win
+    'https://drive.google.com/file/d/1Wubr9_BWhs6O-rkyC_Bh0tOz9GcFRQQY/preview',//loss
 ];
 allSavedCodes = ['{INITIAL}'];
 allCorrectCodes = [
     correctCode('initial'),
     correctCode('puzzle2'),
+    correctCode('q1'),
+    correctCode('q2'),
+    correctCode('q3'),
+    correctCode('q4'),
+    correctCode('q5'),
     correctCode('puzzle3'),
     correctCode('win'),
     correctCode('loss'),
 ];
-totalNumMinutes = 40;
+totalNumMinutes = 30;
 endTime = new Date(new Date().getTime() + totalNumMinutes * 60000);
 gameState = 'menu';
 teamName = '';
 clockShown = true;
 defeatReason = 'unset';
+numOfCodesEntered = 1;
 
 function updateVideo(code) {
-    if (allCorrectCodes.includes(code) && gameState === 'play') {
+    if (gameState === 'play' && (allSavedCodes.includes(code) || code === correctCode[numOfCodesEntered] || code === '{LOSS}')) {
         currentVideo.src = videoLinks[allCorrectCodes.indexOf(code)];
-        if (code === allCorrectCodes[3]) {
+        if (allCorrectCodes.indexOf(code) >= numOfCodesEntered) {
+            numOfCodesEntered = allCorrectCodes.indexOf(code)+1;
+        }
+        if (code === allCorrectCodes[8]) {
             gameState = 'win';
             clearInterval(x);
             playSound('win');
@@ -40,7 +73,7 @@ function updateVideo(code) {
             document.getElementById('mission-controls').style.display = 'block';
             document.getElementById('clock').style.color = 'yellow';
             document.getElementById('clock').style.borderColor = 'yellow';
-        } else if (code === allCorrectCodes[4]) {
+        } else if (code === allCorrectCodes[9]) {
             gameState = 'loss';
             clearInterval(x);
             playSound('loss');
@@ -49,7 +82,7 @@ function updateVideo(code) {
             document.getElementById('mission-controls').style.display = 'block';
             document.getElementById('clock').style.color = 'red';
             document.getElementById('clock').style.borderColor = 'red';
-        } else {
+        } else if (allCorrectCodes.indexOf(code)+1 === numOfCodesEntered) {
             playSound('correct')
         }
     } else {
@@ -58,7 +91,7 @@ function updateVideo(code) {
 }
 
 function currentCode() {
-    if (!allSavedCodes.includes(document.getElementById("code-entry").value.toUpperCase()) && document.getElementById("code-entry").value.toUpperCase() !== '{default}' && allCorrectCodes.includes(document.getElementById("code-entry").value.toUpperCase())) {
+    if (document.getElementById("code-entry").value.toUpperCase() === allCorrectCodes[numOfCodesEntered] && !allSavedCodes.includes(document.getElementById("code-entry").value.toUpperCase()) && document.getElementById("code-entry").value.toUpperCase() !== '{default}' && allCorrectCodes.includes(document.getElementById("code-entry").value.toUpperCase())) {
         allSavedCodes.push(document.getElementById("code-entry").value.toUpperCase());
         addVideoLink(document.getElementById("code-entry").value.toUpperCase());
     }
@@ -90,14 +123,29 @@ function correctCode(video) {
     if (video === 'puzzle2') {
         charString = allowedCodes[1];
     }
-    if (video === 'puzzle3') {
+    if (video === 'q1') {
         charString = allowedCodes[2];
     }
-    if (video === 'win') {
+    if (video === 'q2') {
         charString = allowedCodes[3];
     }
-    if (video === 'loss') {
+    if (video === 'q3') {
         charString = allowedCodes[4];
+    }
+    if (video === 'q4') {
+        charString = allowedCodes[5];
+    }
+    if (video === 'q5') {
+        charString = allowedCodes[6];
+    }
+    if (video === 'puzzle3') {
+        charString = allowedCodes[7];
+    }
+    if (video === 'win') {
+        charString = allowedCodes[8];
+    }
+    if (video === 'loss') {
+        charString = allowedCodes[9];
     }
     correctSymbols = charString.split('-');
     result = '';
