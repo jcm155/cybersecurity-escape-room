@@ -77,12 +77,15 @@ function updateVideo(code) {
         if (getIndexOfCode(code) >= numOfCodesEntered) {
             numOfCodesEntered = getIndexOfCode(code)+1;
         }
-        if (code === allCodes[9].code) {
+        if (code === allCodes[8].code) {
+            document.getElementById('hash-link').style.display = 'block';
+        } else if (code === allCodes[9].code) {
             gameState = 'win';
             clearInterval(x);
             playSound('win');
             document.getElementById('code-controls').style.display = 'none';
             document.getElementById('mission-controls').style.display = 'block';
+            document.getElementById('hash-link').style.display = 'none';
             document.getElementById('clock').style.color = 'yellow';
             document.getElementById('clock').style.borderColor = 'yellow';
         } else if (code === allCodes[10].code) {
@@ -92,6 +95,7 @@ function updateVideo(code) {
             defeatReason = defeatReason === 'unset' ? 'being stupid' : defeatReason;
             document.getElementById('code-controls').style.display = 'none';
             document.getElementById('mission-controls').style.display = 'block';
+            document.getElementById('hash-link').style.display = 'none';
             document.getElementById('clock').style.color = 'red';
             document.getElementById('clock').style.borderColor = 'red';
         } else if (getIndexOfCode(code)+1 === numOfCodesEntered) {
